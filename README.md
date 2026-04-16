@@ -5,14 +5,12 @@
 ## 注意事項
 
 - 請先 fork 本倉庫，提交時請提交 git 連結
-- 本題不允許使用第三方套件
+- 前兩題不允許使用第三方套件
 - **三道題目都已在各自的資料夾中**
 - 三道題目請在不同的 git branch 中完成
 - 全部完成後請將三個 git branch 合併至 main
 
-## 題目一
-
-[題目一](assembly_line/main.go)
+## [題目一](assembly_line/main.go)
 
 請模擬流水線, 五個員工處理三種物品
 
@@ -24,28 +22,31 @@
 6. 開始以及結束處理都需要打印紀錄
 7. 統計總處理時間, 及每個員工處理了多少物品
 
-## 題目二
-
-[題目二](swap/main.go)
-
-請完成 swap 函式, 交換兩個變數的值
-
-1. 允許panic但必須是顯式調用
-2. 地址不允許改變
-3. 禁止修改 swap 類型標記
-
-### 範例
-
-![swap.png](images/swap.png)
-
-## 題目三
-
-[題目三](trim_all_strings/main.go)
+## [題目二](trim_all_strings/main.go)
 
 請完成 TrimAllStrings 函式, 移除字串頭尾空白字元
 
 1. 禁止修改 TrimAllStrings 類型標記
 
-### 範例
+### 輸出參考
 
 ![trim_all_strings.png](images/trim_all_strings.png)
+
+## [題目三](wallet_service)
+
+### **高併發錢包系統**
+
+請實作一個簡化版錢包系統，支援使用者之間的轉帳功能。
+
+系統需確保在高併發情境下，金額正確且不會產生 race condition。
+
+接口請按照 [api.http](wallet_service/api.http) 完成。
+
+伺服器會被分布式部屬，但資料庫只會有一個。
+
+### 要求
+
+- 必須確保交易的一致性
+- 金額禁止變成負數
+- 資料庫請使用 PostgreSQL
+- **需提交 migrate 文件**

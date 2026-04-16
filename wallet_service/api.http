@@ -1,0 +1,23 @@
+### 建立帳戶 返回用戶ID、暱稱、餘額, 創建用戶時預設增加 10000 點
+POST {{BASE_URL}}/accounts
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "暱稱"
+}
+
+### 查詢餘額 返回用戶ID、暱稱、餘額
+GET {{BASE_URL}}/accounts/{id}
+Accept: application/x-yaml
+
+### 轉帳 返回雙方ID、點數、暱稱
+POST {{BASE_URL}}/transfer
+Accept: application/json
+Content-Type: application/json
+
+{
+  "from_id": "A",
+  "to_id": "B",
+  "amount": "11.11"
+}
