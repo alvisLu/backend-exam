@@ -42,7 +42,7 @@ func main() {
 	transferHandler := transfers.NewHandler(transferSvc)
 
 	r := gin.Default()
-	r.Use(httpx.ErrorHandler())
+	r.Use(httpx.ServerID(), httpx.ErrorHandler())
 	r.GET("/healthz", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})

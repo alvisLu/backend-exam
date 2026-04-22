@@ -4,9 +4,18 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
+
+func ServerID() gin.HandlerFunc {
+	hostname, _ := os.Hostname()
+	return func(c *gin.Context) {
+		c.Header("X-Server-ID", hostname)
+		c.Next()
+	}
+}
 
 func ErrorHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
