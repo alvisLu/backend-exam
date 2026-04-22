@@ -9,5 +9,6 @@ type HTTPError struct {
 
 func (e *HTTPError) Error() string { return e.Message }
 
-func BadRequest(msg string) *HTTPError { return &HTTPError{Status: http.StatusBadRequest, Message: msg} }
-func NotFound(msg string) *HTTPError   { return &HTTPError{Status: http.StatusNotFound, Message: msg} }
+func BadRequest(msg string) *HTTPError           { return &HTTPError{Status: http.StatusBadRequest, Message: msg} }
+func NotFound(msg string) *HTTPError             { return &HTTPError{Status: http.StatusNotFound, Message: msg} }
+func UnprocessableEntity(msg string) *HTTPError  { return &HTTPError{Status: http.StatusUnprocessableEntity, Message: msg} }

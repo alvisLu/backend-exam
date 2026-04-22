@@ -15,6 +15,7 @@ import (
 	"github.com/alvis/wallet_service/internal/accounts"
 	"github.com/alvis/wallet_service/internal/db"
 	"github.com/alvis/wallet_service/internal/httpx"
+	"github.com/alvis/wallet_service/internal/transfers"
 )
 
 func main() {
@@ -36,12 +37,17 @@ func main() {
 	accountSvc := accounts.NewService(accountStore)
 	accountHandler := accounts.NewHandler(accountSvc)
 
+	transferStore := transfers.NewStore(gormDB)
+	transferSvc := transfers.NewService(transferStore)
+	transferHandler := transfers.NewHandler(transferSvc)
+
 	r := gin.Default()
 	r.Use(httpx.ErrorHandler())
 	r.GET("/healthz", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
 	accountHandler.Register(r)
+	transferHandler.Register(r)
 
 	srv := &http.Server{
 		Addr:              ":" + port,
