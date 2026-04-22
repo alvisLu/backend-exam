@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"strings"
+
+	"github.com/google/uuid"
 )
 
 var (
@@ -28,4 +30,8 @@ func (s *Service) CreateAccount(ctx context.Context, name string) (*Account, err
 		return nil, ErrInvalidName
 	}
 	return s.store.Create(ctx, name)
+}
+
+func (s *Service) GetAccount(ctx context.Context, id uuid.UUID) (*Account, error) {
+	return s.store.GetByID(ctx, id)
 }
