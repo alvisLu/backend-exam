@@ -1,0 +1,10 @@
+.git
+.gitignore
+.dockerignore
+Dockerfile
+docker-compose.yml
+Makefile
+README.md
+api.http
+test/
+*.md
