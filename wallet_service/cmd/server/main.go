@@ -12,7 +12,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/alvis/wallet_service/internal/store"
+	"github.com/alvis/wallet_service/internal/accounts"
+	"github.com/alvis/wallet_service/internal/db"
 )
 
 func main() {
@@ -25,16 +26,20 @@ func main() {
 		port = "8080"
 	}
 
-	db, err := store.Open(dsn)
+	gormDB, err := db.Open(dsn)
 	if err != nil {
 		log.Fatalf("open db: %v", err)
 	}
-	_ = db
+
+	accountStore := accounts.NewStore(gormDB)
+	accountSvc := accounts.NewService(accountStore)
+	accountHandler := accounts.NewHandler(accountSvc)
 
 	r := gin.Default()
 	r.GET("/healthz", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
+	accountHandler.Register(r)
 
 	srv := &http.Server{
 		Addr:              ":" + port,
