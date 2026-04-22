@@ -5,9 +5,9 @@ type CreateAccountRequest struct {
 }
 
 type AccountResponse struct {
-	ID      string `json:"id"`
-	Name    string `json:"name"`
-	Balance string `json:"balance"`
+	ID      string `json:"id"      yaml:"id"`
+	Name    string `json:"name"    yaml:"name"`
+	Balance string `json:"balance" yaml:"balance"`
 }
 
 func toAccountResponse(a *Account) AccountResponse {

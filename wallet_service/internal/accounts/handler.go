@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"gopkg.in/yaml.v3"
 
 	"github.com/alvis/wallet_service/internal/httpx"
 )
@@ -51,5 +52,15 @@ func (h *Handler) getAccount(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, toAccountResponse(acc))
+	resp := toAccountResponse(acc)
+	if c.GetHeader("Accept") == "application/x-yaml" {
+		out, err := yaml.Marshal(resp)
+		if err != nil {
+			_ = c.Error(err)
+			return
+		}
+		c.Data(http.StatusOK, "application/x-yaml", out)
+		return
+	}
+	c.JSON(http.StatusOK, resp)
 }
