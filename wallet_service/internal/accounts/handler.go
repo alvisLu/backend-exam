@@ -1,11 +1,12 @@
 package accounts
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+
+	"github.com/alvis/wallet_service/internal/httpx"
 )
 
 type Handler struct {
@@ -24,17 +25,13 @@ func (h *Handler) Register(r *gin.Engine) {
 func (h *Handler) createAccount(c *gin.Context) {
 	var req CreateAccountRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body"})
+		_ = c.Error(httpx.BadRequest("invalid request body"))
 		return
 	}
 
 	acc, err := h.svc.CreateAccount(c.Request.Context(), req.Name)
 	if err != nil {
-		if errors.Is(err, ErrInvalidName) {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal error"})
+		_ = c.Error(err)
 		return
 	}
 
@@ -44,17 +41,13 @@ func (h *Handler) createAccount(c *gin.Context) {
 func (h *Handler) getAccount(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid account id"})
+		_ = c.Error(httpx.BadRequest("invalid account id"))
 		return
 	}
 
 	acc, err := h.svc.GetAccount(c.Request.Context(), id)
 	if err != nil {
-		if errors.Is(err, ErrAccountNotFound) {
-			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
-			return
-		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal error"})
+		_ = c.Error(err)
 		return
 	}
 

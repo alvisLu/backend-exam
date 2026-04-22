@@ -14,6 +14,7 @@ import (
 
 	"github.com/alvis/wallet_service/internal/accounts"
 	"github.com/alvis/wallet_service/internal/db"
+	"github.com/alvis/wallet_service/internal/httpx"
 )
 
 func main() {
@@ -36,6 +37,7 @@ func main() {
 	accountHandler := accounts.NewHandler(accountSvc)
 
 	r := gin.Default()
+	r.Use(httpx.ErrorHandler())
 	r.GET("/healthz", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})

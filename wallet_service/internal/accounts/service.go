@@ -6,14 +6,9 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
-)
+	"gorm.io/gorm"
 
-var (
-	ErrAccountNotFound   = errors.New("account not found")
-	ErrInsufficientFunds = errors.New("insufficient funds")
-	ErrSameAccount       = errors.New("from and to are the same account")
-	ErrInvalidAmount     = errors.New("invalid amount")
-	ErrInvalidName       = errors.New("invalid name")
+	"github.com/alvis/wallet_service/internal/httpx"
 )
 
 type Service struct {
@@ -27,11 +22,18 @@ func NewService(store *Store) *Service {
 func (s *Service) CreateAccount(ctx context.Context, name string) (*Account, error) {
 	name = strings.TrimSpace(name)
 	if name == "" {
-		return nil, ErrInvalidName
+		return nil, httpx.BadRequest("name shoule not be empty")
 	}
 	return s.store.Create(ctx, name)
 }
 
 func (s *Service) GetAccount(ctx context.Context, id uuid.UUID) (*Account, error) {
-	return s.store.GetByID(ctx, id)
+	acc, err := s.store.GetByID(ctx, id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, httpx.NotFound("account not found")
+		}
+		return nil, err
+	}
+	return acc, nil
 }
